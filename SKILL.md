@@ -411,7 +411,63 @@ Compound adjectives before a noun must be hyphenated.
 
 ### Check 5: Figures and Tables
 
-<!-- To be filled in -->
+**Goal**: Verify that every figure and table is referenced in the text, has a self-contained caption, uses vector graphics, and is placed close to its first reference.
+
+#### 5.1 Check that every figure and table is referenced
+
+Collect all figure and table labels from `\label{}` commands inside `figure` and `table` environments. Collect all references to figures and tables from `\ref{}`, `\cref{}`, `\autoref{}`, and `\Cref{}` commands in the body text.
+
+- `[ERROR]` if a figure or table has a `\label{}` but is never referenced in the body text.
+- `[ERROR]` if a figure or table is referenced but has no `\label{}` (hardcoded number used directly).
+- `[ERROR]` if a figure or table is referenced only in its own caption (self-referential, not referenced from body text).
+
+#### 5.2 Check that every reference points to an existing label
+
+- `[ERROR]` if a `\ref{}`, `\cref{}`, or similar command references a label that does not exist in the document (dangling reference).
+
+#### 5.3 Check caption quality
+
+Every figure and table caption must be self-contained: a reader should understand what is shown without reading the surrounding text.
+
+- `[ERROR]` if a caption is a single word or fragment (e.g., `\caption{Results.}`) — captions should describe what is shown.
+- `[WARN]` if a caption uses an abbreviation that is not introduced either within the caption itself or in the document before the figure/table appears in reading order.
+- `[WARN]` if a caption uses a math symbol that is not defined within the caption and has not been defined in the main text before this point.
+- `[ERROR]` if a caption ends without a period.
+
+#### 5.4 Check that figures are referenced before they appear
+
+Figures and tables should appear close to and after their first reference in the text.
+
+- `[WARN]` if a figure or table appears in the document more than one page before its first in-text reference (forward float that readers encounter before the motivation).
+- `[INFO]` if a figure or table appears more than two pages after its first reference (may have drifted too far).
+
+#### 5.5 Check figure format
+
+- `[WARN]` if a figure is included using a raster format (`.png`, `.jpg`, `.jpeg`, `.bmp`, `.gif`) — prefer vector formats (`.pdf`, `.eps`, `.svg`). Raster figures lose quality when scaled and are generally not accepted by IEEE/ACM venues for line art and diagrams.
+- `[INFO]` if a figure file cannot be located on disk (broken include path).
+
+#### 5.6 Check float placement options
+
+Figures and tables should be placed at the top of a page (`[t]` or `[!t]`). Bottom placement and forced `[h]`/`[H]` options interrupt reading flow and are generally discouraged.
+
+- `[WARN]` if a `figure` or `table` environment uses `[b]` (bottom placement).
+- `[WARN]` if a `figure` or `table` environment uses `[h]` or `[H]` (here placement) — prefer `[t]` to let LaTeX choose the best top-of-page slot.
+- `[INFO]` if a `figure` or `table` environment has no placement option specified (LaTeX default may not match intended behaviour).
+
+#### 5.7 Check table formatting
+
+Tables must use the `booktabs` package (`\toprule`, `\midrule`, `\bottomrule`) instead of `\hline`.
+
+- `[ERROR]` if `\hline` is used inside a `tabular` or `tabularx` environment — replace with `\toprule` (top), `\midrule` (between header and body), and `\bottomrule` (bottom).
+- `[ERROR]` if `booktabs` rules are used but `\usepackage{booktabs}` is absent from the preamble.
+- `[WARN]` if a table has no top or bottom rule at all (neither `\hline` nor `\toprule`/`\bottomrule`).
+- `[WARN]` if vertical lines (`|` in the column spec, e.g., `\begin{tabular}{|l|c|}`) are used — booktabs style avoids vertical rules.
+
+#### 5.8 Check that figures are explained in the text
+
+Every figure and table should be discussed in the surrounding text, not just referenced.
+
+- `[WARN]` if a figure or table reference appears in the text but the surrounding paragraph contains no sentence that describes or interprets what the figure/table shows (i.e., the reference is a bare parenthetical like "(see Fig. 3)" with no accompanying explanation).
 
 ---
 
