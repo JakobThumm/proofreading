@@ -1,6 +1,6 @@
 ---
 name: proofread
-description: Proofread an academic paper against a structured checklist covering abbreviations, math notation, math consistency, introduction structure, grammar and style, and figures and tables. Two modes — report (full written report) and interactive (fix issues step by step together with the user).
+description: Proofread an academic paper against a structured checklist covering abbreviations, math notation, introduction structure, grammar and style, and figures and tables. Two modes — report (full written report) and interactive (fix issues step by step together with the user).
 allowed-tools: Read Bash Edit
 license: MIT license
 metadata:
@@ -34,7 +34,7 @@ Use this skill when:
 ```
 
 - `path` — path to the paper's root `.tex` file or directory containing `.tex` files. Defaults to the current directory.
-- `--check <id>` — run only a specific check. IDs: `abbrev`, `math-notation`, `math-consistency`, `intro`, `grammar`, `figures`. Omit to run all six.
+- `--check <id>` — run only a specific check. IDs: `abbrev`, `math-notation`, `intro`, `grammar`, `figures`. Omit to run all five.
 - `--interactive` — enable interactive mode. Omit for report mode.
 
 ---
@@ -271,25 +271,19 @@ For each custom command defined in Step 1, search all math environments for occu
 
 ---
 
-### Check 3: Math Consistency
+### Check 3: Introduction Structure
 
 <!-- To be filled in -->
 
 ---
 
-### Check 4: Introduction Structure
+### Check 4: Grammar and Style
 
 <!-- To be filled in -->
 
 ---
 
-### Check 5: Grammar and Style
-
-<!-- To be filled in -->
-
----
-
-### Check 6: Figures and Tables
+### Check 5: Figures and Tables
 
 <!-- To be filled in -->
 
@@ -362,10 +356,9 @@ Date: <today>
 |---|--------------------------|--------|
 | 1 | Abbreviations            | n      |
 | 2 | Math Symbols & Notation  | n      |
-| 3 | Math Consistency         | n      |
-| 4 | Introduction Structure   | n      |
-| 5 | Grammar & Style          | n      |
-| 6 | Figures & Tables         | n      |
+| 3 | Introduction Structure   | n      |
+| 4 | Grammar & Style          | n      |
+| 5 | Figures & Tables         | n      |
 |   | **Total**                | **n**  |
 
 ---
@@ -376,16 +369,13 @@ Date: <today>
 ## 2. Math Symbols & Notation
 <findings or "No issues found.">
 
-## 3. Math Consistency
+## 3. Introduction Structure
 <findings or "No issues found.">
 
-## 4. Introduction Structure
+## 4. Grammar & Style
 <findings or "No issues found.">
 
-## 5. Grammar & Style
-<findings or "No issues found.">
-
-## 6. Figures & Tables
+## 5. Figures & Tables
 <findings or "No issues found.">
 ```
 
