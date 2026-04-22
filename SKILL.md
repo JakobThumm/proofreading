@@ -727,10 +727,10 @@ Sort findings within each section by severity (ERRORs first), then by line numbe
 
 ### PDF generation
 
-To convert the Markdown report to a formatted PDF, run:
+After writing the Markdown report, automatically convert it to PDF by running:
 
 ```bash
-python skills/proofreading/scripts/generate_report_pdf.py <report.md> [-o <output.pdf>] [--engine xelatex]
+python ~/.claude/skills/proofreading/scripts/generate_report_pdf.py <report.md>
 ```
 
-The script requires `pandoc` and a LaTeX engine (`xelatex` recommended). Check dependencies with `--check-deps`. The LaTeX template is at `templates/report_latex.tex`.
+Run this as the final step of report mode. If the script fails (missing `pandoc` or LaTeX), print the error and note that the Markdown report is still complete and readable. The LaTeX template is at `~/.claude/skills/proofreading/templates/report_latex.tex`.

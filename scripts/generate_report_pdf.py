@@ -37,7 +37,7 @@ def build_pdf(md_path: Path, out_path: Path, engine: str) -> None:
     cmd = [
         "pandoc",
         str(md_path),
-        "--from", "markdown",
+        "--from", "markdown-raw_tex",
         "--to", "pdf",
         "--pdf-engine", engine,
         "--template", str(TEMPLATE),
@@ -58,7 +58,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Convert proofreading report markdown to PDF.")
     parser.add_argument("input", help="Path to the markdown report file")
     parser.add_argument("-o", "--output", help="Output PDF path (default: same name as input with .pdf)")
-    parser.add_argument("--engine", default="xelatex", choices=["xelatex", "pdflatex", "lualatex"],
+    parser.add_argument("--engine", default="pdflatex", choices=["xelatex", "pdflatex", "lualatex"],
                         help="LaTeX engine to use (default: xelatex)")
     parser.add_argument("--check-deps", action="store_true", help="Check dependencies and exit")
     args = parser.parse_args()

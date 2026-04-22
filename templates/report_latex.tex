@@ -3,7 +3,11 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=2.5cm]{geometry}
+\usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{enumitem}
@@ -75,6 +79,9 @@
 % Tighter list spacing
 \setlist[itemize]{noitemsep, topsep=2pt}
 \setlist[enumerate]{noitemsep, topsep=2pt}
+
+% Required pandoc macros
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 $if(title)$
 \title{\textbf{$title$}}
