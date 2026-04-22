@@ -328,7 +328,84 @@ The last paragraph of the introduction should describe the structure of the rema
 
 ### Check 4: Grammar and Style
 
-<!-- To be filled in -->
+**Goal**: Verify that the paper follows consistent grammatical conventions, uses the correct voice and tense, applies English punctuation rules correctly, and avoids known stylistic anti-patterns.
+
+#### 4.1 Voice and person
+
+- `[ERROR]` if first-person singular "I" is used anywhere (use "we" or passive voice instead).
+- `[WARN]` if passive voice is used in a context where "we" would work naturally (e.g., "It is shown that..." → "We show that..."). Passive is acceptable only when describing system or environmental properties (e.g., "The robot is mounted on a table").
+- `[INFO]` if "we" is used to describe a system or environment property where passive would be more appropriate (e.g., "We mount the robot on a table" when describing a fixed experimental setup).
+
+#### 4.2 Tense consistency
+
+**Main body**: use present tense throughout.
+- `[WARN]` if past tense is used in the main body outside of the related work section (e.g., "We proposed a method" → "We propose a method").
+
+**Figures and tables**: always referenced in present tense.
+- `[ERROR]` if a figure or table is referenced in past or future tense (e.g., "Fig. 3 showed..." → "Fig. 3 shows...", "Table 1 will present..." → "Table 1 presents...").
+
+**Related work section**: tense depends on intent.
+- Simple past for describing results of a published work: "Smith [1] found that..."
+- Present for author's own evaluation of the literature: "This approach, however, fails to..."
+- Present perfect for recent or ongoing relevance: "Recent work has shown [7]..."
+- `[WARN]` if only one tense is used throughout the entire related work section (likely indicates mechanical rather than intentional tense choice).
+
+#### 4.3 English variant consistency
+
+Detect the dominant English variant used in the paper (American or British) by scanning for known variant-specific spellings:
+
+| Feature | American | British |
+|---------|----------|---------|
+| `-or` / `-our` | behavior | behaviour |
+| `-er` / `-re` | center | centre |
+| `-ize` / `-ise` | analyze | analyse |
+| Double consonant | modeled | modelled |
+
+- `[ERROR]` if both variants are used (e.g., "behaviour" and "center" in the same paper). Report all deviations from the dominant variant.
+- `[INFO]` state which variant was detected at the top of the Check 4 findings.
+
+#### 4.4 Punctuation
+
+**Oxford comma**: use a comma before the final conjunction in a list of three or more items.
+- `[ERROR]` if a list of three or more items is missing the Oxford comma (e.g., "We present results, discussion and conclusion" → "... discussion, and conclusion").
+
+**Comma after i.e. and e.g.**:
+- `[ERROR]` if "i.e." or "e.g." is not followed by a comma (e.g., "i.e. the result" → "i.e., the result").
+
+**Em-dashes**: avoid em-dashes (`---`, `\textemdash`, `—`). Use a comma or split the sentence instead.
+- `[WARN]` for every em-dash found. Suggest a comma or sentence split as the fix.
+
+**Comma with "which"**: use a comma before "which" when the clause is non-restrictive (i.e., the sentence is understandable without it); omit the comma when the clause is restrictive (identifies which specific thing is meant).
+- `[INFO]` flag each "which" clause for author review, noting whether a comma is present and whether it seems non-restrictive or restrictive. Do not auto-classify as error — this requires human judgement.
+
+#### 4.5 Prohibited words and phrases
+
+Flag the following as `[WARN]`:
+
+**Vague intensifiers** — never use these; emphasize through a shorter sentence or a quantitative qualifier instead:
+`very`, `quite`, `rather`
+
+**Overused or inflated vocabulary** — replace with simpler alternatives:
+`utilize` (→ use), `emerges`, `pioneered`, `encompass`, `poised to become`, `paramount`, `harbor`, `foster`
+
+**Possessive form**: prefer "of" over "'s" when referring to inanimate objects or concepts (e.g., "the speed of the robot" not "the robot's speed").
+- `[INFO]` flag each `'s` possessive applied to a non-person noun for author review.
+
+#### 4.6 Quantitative claims
+
+A quantitative result stated in prose must be immediately supported by a number in the same sentence.
+- `[WARN]` if a comparative or superlative claim appears without an accompanying number in the same sentence: e.g., "our method significantly outperforms the baseline" without a percentage, ratio, or absolute value following it.
+- `[WARN]` if "state-of-the-art" is claimed without a citation or numeric comparison.
+
+#### 4.7 Compound adjectives
+
+Compound adjectives before a noun must be hyphenated.
+- `[WARN]` for common unhyphenated compound adjectives before a noun, e.g.: `safety critical` → `safety-critical`, `real world` → `real-world`, `long horizon` → `long-horizon`, `state of the art` → `state-of-the-art`, `high frequency` → `high-frequency`, `data driven` → `data-driven`, `end to end` → `end-to-end`.
+
+#### 4.8 Overused sentence openers
+
+- `[INFO]` if "Note that" is used more than once per section. It should be reserved for genuinely non-obvious implications — flag each use for author review.
+- `[INFO]` if a paragraph ends with a boilerplate closing sentence that adds no content (e.g., "This concludes our discussion of X.", "In summary, we have shown..."). These are rarely needed and often pad length.
 
 ---
 
