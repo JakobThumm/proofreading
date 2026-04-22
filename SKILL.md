@@ -462,6 +462,8 @@ Tables must use the `booktabs` package (`\toprule`, `\midrule`, `\bottomrule`) i
 - `[ERROR]` if `booktabs` rules are used but `\usepackage{booktabs}` is absent from the preamble.
 - `[WARN]` if a table has no top or bottom rule at all (neither `\hline` nor `\toprule`/`\bottomrule`).
 - `[WARN]` if vertical lines (`|` in the column spec, e.g., `\begin{tabular}{|l|c|}`) are used — booktabs style avoids vertical rules.
+- `[WARN]` if the first column of a table is not left-aligned (`l`) — the first column should be `l`, all remaining columns `c`.
+- `[WARN]` if any column other than the first is left-aligned (`l`) without a clear reason — prefer `c` for data columns.
 
 #### 5.8 Check that figures are explained in the text
 
