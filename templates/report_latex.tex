@@ -1,0 +1,93 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+% Colors
+\definecolor{errorred}{HTML}{C0392B}
+\definecolor{warnambер}{HTML}{D68910}
+\definecolor{infoblue}{HTML}{2471A3}
+\definecolor{summarybox}{HTML}{F2F3F4}
+\definecolor{headergray}{HTML}{2C3E50}
+
+% Hyperlink styling
+\hypersetup{
+    colorlinks=true,
+    linkcolor=headergray,
+    urlcolor=infoblue,
+}
+
+% Header / footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{headergray}{Proofreading Report}}
+\fancyhead[R]{\small\textcolor{headergray}{\today}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Section styling
+\titleformat{\section}{\large\bfseries\color{headergray}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{headergray}}{}{0em}{}
+
+% Summary box
+\newmdenv[
+    backgroundcolor=summarybox,
+    linecolor=headergray,
+    linewidth=0.5pt,
+    leftmargin=0pt,
+    rightmargin=0pt,
+    innerleftmargin=10pt,
+    innerrightmargin=10pt,
+    innertopmargin=6pt,
+    innerbottommargin=6pt,
+    skipabove=6pt,
+    skipbelow=6pt,
+]{summarybox}
+
+% Severity label commands
+\newcommand{\errortag}{\textcolor{errorred}{\textbf{[ERROR]}}}
+\newcommand{\warntag}{\textcolor{warnambер}{\textbf{[WARN]}}}
+\newcommand{\infotag}{\textcolor{infoblue}{\textbf{[INFO]}}}
+
+% Code snippet styling
+\lstset{
+    basicstyle=\small\ttfamily,
+    backgroundcolor=\color{summarybox},
+    frame=single,
+    framerule=0.3pt,
+    rulecolor=\color{headergray},
+    breaklines=true,
+    breakatwhitespace=true,
+    columns=fullflexible,
+}
+
+% Tighter list spacing
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+
+$if(title)$
+\title{\textbf{$title$}}
+$endif$
+\date{}
+
+\begin{document}
+
+$if(title)$
+\maketitle
+\thispagestyle{fancy}
+$endif$
+
+$body$
+
+\end{document}

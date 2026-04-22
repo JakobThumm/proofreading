@@ -595,47 +595,20 @@ For each issue (ordered by check, then severity ERRORs first, then line number):
 
 ## Output Format
 
-After all checks are complete, produce a single report with the following structure:
+After all checks are complete, produce a single Markdown report. Follow the structure defined in `templates/output_template.md` exactly — use it as the skeleton and fill in every placeholder.
 
-```
-# Proofreading Report — <paper title or filename>
-Date: <today>
+### Report structure summary
 
-## Scorecard
-| # | Check                    | Issues |
-|---|--------------------------|--------|
-| 1 | Abbreviations            | n      |
-| 2 | Math Symbols & Notation  | n      |
-| 3 | Introduction Structure   | n      |
-| 4 | Grammar & Style          | n      |
-| 5 | Figures & Tables         | n      |
-| 6 | Statistical Relevance    | n      |
-|   | **Total**                | **n**  |
-
----
-
-## 1. Abbreviations
-<findings or "No issues found.">
-
-## 2. Math Symbols & Notation
-<findings or "No issues found.">
-
-## 3. Introduction Structure
-<findings or "No issues found.">
-
-## 4. Grammar & Style
-<findings or "No issues found.">
-
-## 5. Figures & Tables
-<findings or "No issues found.">
-
-## 6. Statistical Relevance
-<findings or "No issues found.">
-```
+1. **Header**: paper title, date, source path.
+2. **Scorecard**: one row per check with separate Errors / Warnings / Info / Total columns.
+3. **Overall Assessment** (immediately after the scorecard):
+   - A 2–4 sentence paragraph on the overall quality: strongest areas and most critical weaknesses.
+   - A **Top Issues to Address** list of the 3–6 most impactful issues across all checks, ordered by impact. Format: `[SEVERITY] Check N.x — description`. This gives the author a quick action list before reading the full details.
+4. **Per-check sections** (one per check):
+   - **Summary**: 1–2 sentences on the key findings for that check (e.g., "All abbreviations are correctly introduced. However, three `a NN` article errors and one double introduction were found.").
+   - **Findings**: individual findings in finding format (see below). Write "No issues found." if the check is clean.
 
 ### Finding Format
-
-Each individual finding follows this format:
 
 ```
 - [SEVERITY] file.tex:LINE — <concise description of the issue>
@@ -649,3 +622,13 @@ Severity levels:
 - `[INFO]` — minor style note or suggestion
 
 Sort findings within each section by severity (ERRORs first), then by line number.
+
+### PDF generation
+
+To convert the Markdown report to a formatted PDF, run:
+
+```bash
+python skills/proofreading/scripts/generate_report_pdf.py <report.md> [-o <output.pdf>] [--engine xelatex]
+```
+
+The script requires `pandoc` and a LaTeX engine (`xelatex` recommended). Check dependencies with `--check-deps`. The LaTeX template is at `templates/report_latex.tex`.
