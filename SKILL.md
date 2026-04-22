@@ -1,6 +1,6 @@
 ---
 name: proofread
-description: Proofread an academic paper against a structured checklist covering abbreviations, math notation, introduction structure, grammar and style, and figures and tables. Two modes — report (full written report) and interactive (fix issues step by step together with the user).
+description: Proofread an academic paper against a structured checklist covering abbreviations, math notation, introduction structure, grammar and style, figures and tables, and statistical relevance. Two modes — report (full written report) and interactive (fix issues step by step together with the user).
 allowed-tools: Read Bash Edit
 license: MIT license
 metadata:
@@ -34,7 +34,7 @@ Use this skill when:
 ```
 
 - `path` — path to the paper's root `.tex` file or directory containing `.tex` files. Defaults to the current directory.
-- `--check <id>` — run only a specific check. IDs: `abbrev`, `math-notation`, `intro`, `grammar`, `figures`. Omit to run all five.
+- `--check <id>` — run only a specific check. IDs: `abbrev`, `math-notation`, `intro`, `grammar`, `figures`, `stats`. Omit to run all six.
 - `--interactive` — enable interactive mode. Omit for report mode.
 
 ---
@@ -471,6 +471,72 @@ Every figure and table should be discussed in the surrounding text, not just ref
 
 - `[WARN]` if a figure or table reference appears in the text but the surrounding paragraph contains no sentence that describes or interprets what the figure/table shows (i.e., the reference is a bare parenthetical like "(see Fig. 3)" with no accompanying explanation).
 
+#### 5.9 Check result figure visual quality
+
+For each figure file included in the paper, view it directly (use the Read tool on PDF/image files) and assess the following visual properties. Apply these checks only to result and data figures (plots, graphs, bar charts, line plots) — skip diagrams, schematics, and architecture figures.
+
+**Axis labels:**
+- `[ERROR]` if any axis (x or y) of a plot has no label.
+- `[WARN]` if an axis label is present but has no unit where a unit is expected (e.g., "Time" without "(s)", "Distance" without "(m)").
+
+**Y-axis limits:**
+- `[WARN]` if multiple similar plots (same metric, same experiment type) have different y-axis limits, making visual comparison misleading. Flag the specific figures and their differing limits.
+
+**Text size:**
+- `[WARN]` if any text in the figure (axis labels, tick labels, legend text) appears noticeably smaller than the caption footnote size. A slightly smaller size is acceptable; tiny or unreadable text is not.
+- `[ERROR]` if any text is so small it would be unreadable in print.
+
+**Line thickness:**
+- `[WARN]` if plotted lines appear thin (hairline weight). Lines in result figures should be thick enough to be clearly readable in print and when the figure is scaled down.
+
+**Caption placement:**
+- `[ERROR]` if the figure has a title rendered inside the plot area (as a Matplotlib/plot title above the axes) — this duplicates the LaTeX caption and should be removed.
+
+**Legend:**
+- `[WARN]` if a figure with multiple lines, bars, or series has no legend.
+- `[WARN]` if the legend overlaps with data or is placed in a location that obscures results.
+- `[WARN]` if legend text is too small to read comfortably.
+
+**Color and accessibility:**
+- `[WARN]` if the figure relies solely on color to distinguish series with no additional differentiator (different line styles: solid/dashed/dotted, or different markers: circle/square/triangle). Color-only figures are inaccessible to colorblind readers and unreadable in greyscale print.
+- `[WARN]` if a red-green color pair is used as the primary distinguishing colors (most common form of colorblind inaccessibility).
+
+**Consistency across figures:**
+- `[WARN]` if the same method or condition is represented by different colors or markers in different figures of the paper. Consistent color/marker assignment across all figures is strongly preferred.
+
+**Chartjunk:**
+- `[WARN]` if the figure uses 3D effects, gradient fills, or drop shadows on 2D data — these add visual noise without information.
+
+**Grid lines:**
+- `[INFO]` if a result plot has no background grid lines. Light grid lines generally improve readability.
+
+---
+
+### Check 6: Statistical Relevance
+
+**Goal**: Verify that quantitative results are reported with appropriate statistical context — error bars, confidence intervals, standard deviations, or equivalent — wherever this is meaningful.
+
+#### 6.1 Check result figures for uncertainty reporting
+
+For each result figure (line plots, bar charts, scatter plots showing experimental outcomes), view the figure and check whether uncertainty is visualized.
+
+- `[WARN]` if a bar chart shows mean values without error bars (standard deviation, standard error, or confidence interval).
+- `[WARN]` if a line plot of results over trials/episodes/time shows no shaded confidence region or error band around the mean.
+- `[WARN]` if a scatter plot shows point estimates with no indication of spread or confidence.
+
+**Context**: some figures legitimately show only means — e.g., a single deterministic run, a demonstration trajectory, or a figure where uncertainty would clutter the visualization. In such cases, the text should explicitly state why uncertainty is not shown. Flag the absence of uncertainty visualization as `[WARN]` rather than `[ERROR]` and note that it requires author judgement.
+
+#### 6.2 Check result tables for uncertainty reporting
+
+For each results table:
+- `[WARN]` if numerical results are reported as plain values (e.g., `84.3`) without an associated uncertainty (e.g., `84.3 ± 1.2`), standard deviation, or confidence interval, and the table reports results from stochastic experiments (RL training, neural network training, randomized trials).
+- `[INFO]` if the table caption or a table footnote explains that results are deterministic or averaged over a stated number of seeds — this is acceptable justification for omitting uncertainty.
+
+#### 6.3 Check prose claims for statistical support
+
+- `[WARN]` if the text makes a comparative claim (e.g., "our method outperforms", "achieves higher accuracy", "converges faster") without citing a statistical test, confidence interval, or at minimum a clear description of the number of runs and variance.
+- `[WARN]` if the text describes results from a single run as if they were general findings. Phrases like "the agent achieves X" without noting the number of seeds or runs should be flagged.
+
 ---
 
 ## Mode A: Report Mode (default)
@@ -543,6 +609,7 @@ Date: <today>
 | 3 | Introduction Structure   | n      |
 | 4 | Grammar & Style          | n      |
 | 5 | Figures & Tables         | n      |
+| 6 | Statistical Relevance    | n      |
 |   | **Total**                | **n**  |
 
 ---
@@ -560,6 +627,9 @@ Date: <today>
 <findings or "No issues found.">
 
 ## 5. Figures & Tables
+<findings or "No issues found.">
+
+## 6. Statistical Relevance
 <findings or "No issues found.">
 ```
 
