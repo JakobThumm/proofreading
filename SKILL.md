@@ -232,6 +232,12 @@ For each symbol whose type is known (from Step 1 signals or prose definitions), 
 - `[ERROR]` if `\mathbf` is used for Greek letters or symbols that should use `\boldsymbol` instead (e.g., `\mathbf{\theta}` → `\boldsymbol{\theta}`).
 - `[ERROR]` if an accent or decoration is placed outside rather than around only the base letter: e.g., `\hat{f(x)}` → `\hat{f}(x)`.
 - `[WARN]` if `\frac` is used inside inline math (`$...$`) where `\tfrac` or a slash form would be more readable.
+- `[ERROR]` if `\mathbb` is used for anything other than the standard number sets `\mathbb{R}`, `\mathbb{N}`, `\mathbb{Z}`, `\mathbb{C}`, `\mathbb{Q}`. It must not be used for general matrices, indicator functions, or other objects.
+- `[WARN]` if time derivatives are written as `\frac{d x}{d t}` or `\frac{\partial x}{\partial t}` in display equations where `\dot{x}` or `\ddot{x}` would be more compact and consistent with the rest of the paper.
+- `[WARN]` if an equation is referenced in prose as "equation 3" or "eq. 3" instead of `\eqref{label}`, which produces `(3)` automatically and tracks renumbering.
+- `[WARN]` if a multi-step derivation contains `=` or `\leq` transitions with no indication of which equation or rule was used. Suggest `\overset{(X)}{}` or a brief prose annotation to make the derivation checkable.
+- `[ERROR]` if `\forall` or `\exists` is followed directly by a set (e.g., `\forall \{a, b, c\}`) rather than a variable with a domain constraint (e.g., `\forall x \in \mathcal{X}`).
+- `[INFO]` if "zero vector" is used; prefer "vector of zeros" (`\mathbf{0}`) to avoid confusion with the zero element of a vector space.
 
 #### 2.8 Check repeated math expressions and custom command usage
 
@@ -269,6 +275,23 @@ For each custom command defined in Step 1, search all math environments for occu
   Suggestion: Replace with \rhumj.
   ```
 
+#### 2.9 Check notation coherence
+
+- `[ERROR]` if the paper switches between discrete and continuous time notation without explicitly explaining the relationship. For example, using `t_k` for discrete steps in one section and `t` for continuous time in another without a bridging statement.
+- `[WARN]` if the same mathematical operation is written two different ways in different parts of the paper (e.g., `\| \cdot \|` vs `| \cdot |` for the same norm, or `a^\top b` vs `\langle a, b \rangle` for the same inner product).
+- `[WARN]` if the same quantity is denoted differently across sections or the appendix (e.g., `q_i` in the main text vs `\theta_i` in the appendix for joint angles).
+- `[WARN]` if subscripts and superscripts for the same concept are used inconsistently (e.g., `x_i^j` in one place and `x^j_i` or `x_{i,j}` elsewhere for the same meaning).
+
+#### 2.10 Check equation numbering discipline
+
+- `[INFO]` if a numbered equation is never referenced anywhere in the text. An unreferenced equation number adds clutter; suggest removing the number (use the starred environment, e.g., `equation*`).
+- `[INFO]` if an equation `\label{}` is defined but no corresponding `\eqref{label}` or `\ref{label}` is used.
+
+#### 2.11 Check function argument consistency
+
+- `[ERROR]` if a function is called with different numbers of arguments at different points (e.g., `f(x)` in one place and `f(x, t)` elsewhere without explanation).
+- `[WARN]` if a function is defined with arguments in one order but called in a different order at a later use.
+
 ---
 
 ### Check 3: Introduction Structure
@@ -287,7 +310,8 @@ The abstract must follow this fixed four-part structure, in order:
 - `[ERROR]` if any of the four parts is entirely absent.
 - `[WARN]` if the parts appear but are out of order (e.g., approach stated before gap).
 - `[WARN]` if no quantitative result is given (e.g., only qualitative claims like "significantly improves").
-- `[INFO]` if the abstract exceeds 150 words (typical conference limit; adjust if venue is known).
+- `[WARN]` if the abstract exceeds 150 words (typical conference limit; adjust if venue is known).
+- `[WARN]` if the abstract contains the phrase "in this paper" or "in this work" — these are filler phrases that add no information.
 
 #### 3.2 Check introduction structure
 
@@ -303,6 +327,7 @@ The introduction must contain, in roughly this order:
 - `[INFO]` if the section roadmap is absent.
 - `[WARN]` if the gap is not stated explicitly (related work is described but no "However,..." or equivalent contrast is made).
 - `[WARN]` if the proposed approach is not re-stated in the introduction after the related work (it should appear both in the abstract and the introduction).
+- `[WARN]` if the novelty of the work is not stated explicitly (e.g., "To the best of our knowledge, this is the first work to...").
 - `[INFO]` if the introduction order deviates significantly from the structure above.
 
 #### 3.3 Check contribution list
@@ -323,6 +348,31 @@ The last paragraph of the introduction should describe the structure of the rema
 - `[WARN]` if the roadmap uses future tense ("will be presented") instead of present tense ("is presented", "presents").
 - `[WARN]` if not all major sections are mentioned in the roadmap (every top-level `\section{}` except the introduction itself should appear).
 - `[INFO]` if the roadmap does not open with a standard linking phrase such as "The remainder of this paper is structured as follows" or "This paper is organized as follows".
+
+#### 3.5 Check problem statement
+
+If the paper has a dedicated problem statement section or subsection:
+
+- `[ERROR]` if the problem statement mentions the proposed solution (e.g., "we use a safety shield"). The problem statement must describe what needs to be solved, not how.
+- `[WARN]` if the problem statement includes implementation details that belong in the method section.
+
+#### 3.6 Check related work structure
+
+- `[ERROR]` if related work is organized chronologically rather than thematically by approach category. Each category must open with a clear topic sentence.
+- `[WARN]` if the related work section does not end with a gap statement that clearly identifies what prior methods cannot do and thus motivates the proposed work.
+- `[ERROR]` if the related work section explicitly describes or evaluates the proposed method (e.g., "In contrast to prior work, our method does X"). Related work discusses others' work only.
+
+#### 3.7 Check experiments and hypotheses
+
+- `[WARN]` if the experiments section does not state hypotheses explicitly before presenting results (e.g., "H1: ..., H2: ..."). Explicit hypotheses are a frequently recurring professor comment.
+- `[WARN]` if a conclusion generalizes a result to "all cases" or "any environment" when the experiment only covered one or two settings.
+
+#### 3.8 Check conclusions
+
+- `[WARN]` if the conclusion does not explain why the results are better than prior work.
+- `[WARN]` if the conclusion does not reiterate the unique features of the approach.
+- `[WARN]` if the conclusion does not mention at least one key quantitative result.
+- `[INFO]` if the conclusion introduces new content not discussed anywhere else in the paper.
 
 ---
 
@@ -388,7 +438,18 @@ Flag the following as `[WARN]`:
 **Overused or inflated vocabulary** — replace with simpler alternatives:
 `utilize` (→ use), `emerges`, `pioneered`, `encompass`, `poised to become`, `paramount`, `harbor`, `foster`
 
-**Possessive form**: prefer "of" over "'s" when referring to inanimate objects or concepts (e.g., "the speed of the robot" not "the robot's speed").
+**Imprecise word choices** — flag the following specific substitutions as `[WARN]`:
+- `calculation` in a mathematical or algorithmic context → prefer `computation`. "Calculation" implies arithmetic; "computation" covers algorithmic processing.
+- `given` as an adjective meaning "provided" (e.g., "the given trajectory") → prefer `provided`. ("Given an initial state, ..." as a conditional is acceptable.)
+- `gives` meaning "produces" or "provides" (e.g., "this gives us X") → prefer `provides` or `yields`.
+- `dynamic` as a filler adjective for anything that changes over time (e.g., "dynamic human motion") → be specific; prefer "arbitrary", "time-varying", or "changing".
+- `verifiable safety` → prefer `formal safety guarantees` or `provably safe`.
+- `re-define` when extending rather than replacing (e.g., "we re-define the cost function") → prefer `extend` or `incorporate`.
+- `use-case` (hyphenated) as a standalone noun → prefer `use case` (two words, no hyphen).
+- `computationally intensive` → prefer `computationally expensive`.
+
+**Possessive form**: prefer "of" over "'s" when referring to inanimate objects or concepts (e.g., "the speed of the robot" not "the robot's speed"). Exception: proper human names (e.g., "Lyapunov's stability theorem").
+- `[WARN]` for `TERM's NOUN` where TERM is a technical concept, algorithm name, or entity (e.g., "the agent's action" → "the action of the agent").
 - `[INFO]` flag each `'s` possessive applied to a non-person noun for author review.
 
 #### 4.6 Quantitative claims
@@ -400,12 +461,36 @@ A quantitative result stated in prose must be immediately supported by a number 
 #### 4.7 Compound adjectives
 
 Compound adjectives before a noun must be hyphenated.
-- `[WARN]` for common unhyphenated compound adjectives before a noun, e.g.: `safety critical` → `safety-critical`, `real world` → `real-world`, `long horizon` → `long-horizon`, `state of the art` → `state-of-the-art`, `high frequency` → `high-frequency`, `data driven` → `data-driven`, `end to end` → `end-to-end`.
+- `[WARN]` for common unhyphenated compound adjectives before a noun, e.g.: `safety critical` → `safety-critical`, `real world` → `real-world`, `long horizon` → `long-horizon`, `state of the art` → `state-of-the-art`, `high frequency` → `high-frequency`, `data driven` → `data-driven`, `end to end` → `end-to-end`, `high dimensional` → `high-dimensional`, `long term` → `long-term`, `short term` → `short-term`.
+- `[WARN]` if "soft-actor-critic" or similar algorithm names are hyphenated when standing alone as a noun rather than as a compound modifier before another noun.
+- `[INFO]` if a compound noun standing alone (not before another noun) is hyphenated unnecessarily (e.g., "use-case" as a standalone noun).
 
 #### 4.8 Overused sentence openers
 
 - `[INFO]` if "Note that" is used more than once per section. It should be reserved for genuinely non-obvious implications — flag each use for author review.
 - `[INFO]` if a paragraph ends with a boilerplate closing sentence that adds no content (e.g., "This concludes our discussion of X.", "In summary, we have shown..."). These are rarely needed and often pad length.
+
+#### 4.9 Redundancy
+
+- `[WARN]` if the same information is conveyed twice in adjacent sentences or consecutive paragraphs without adding new detail.
+- `[WARN]` if a figure caption repeats verbatim something already stated in the immediately preceding paragraph.
+- `[WARN]` if numbers from a table are repeated verbatim in the text narrative that directly follows the table.
+
+#### 4.10 Strong claims and unsupported statements
+
+- `[WARN]` if a claim uses "prove", "guarantee", "ensure", or "verify" without a formal proof, theorem, or direct citation. Flag each occurrence and note the missing backing.
+- `[WARN]` if the paper states that something "cannot" be done or "is impossible" without a citation or proof.
+- `[WARN]` if a conclusion or result is stated as general ("in any environment", "for all cases") when the experiments only covered one or two specific settings.
+- `[INFO]` if a result that is mathematically trivial is presented as a significant finding without qualification.
+
+#### 4.11 Parameter values in method sections
+
+- `[WARN]` if a specific numerical value (e.g., `200 ms`, `250 Hz`, `0.4 rad`) appears in the method description section rather than in the experimental setup section or a parameter table. Method sections should use symbolic parameter names (e.g., `\Delta T`, `f_{\text{shield}}`); concrete values belong in the experiments section.
+- `[WARN]` if the `siunitx` package is not used, e.g., \SI{200}{\milli \second}.
+
+#### 4.12 Enumeration markers
+
+- `[WARN]` if "First, ...", "Second, ...", "Third, ..." enumeration markers are used when the corresponding items are more than one paragraph apart. When items are spread across multiple paragraphs, readers lose the thread — use subsections or an itemize list instead.
 
 ---
 
@@ -420,6 +505,8 @@ Collect all figure and table labels from `\label{}` commands inside `figure` and
 - `[ERROR]` if a figure or table has a `\label{}` but is never referenced in the body text.
 - `[ERROR]` if a figure or table is referenced but has no `\label{}` (hardcoded number used directly).
 - `[ERROR]` if a figure or table is referenced only in its own caption (self-referential, not referenced from body text).
+- `[WARN]` if a figure is referenced only after its position in the document (i.e., the first `\ref{}`/`\autoref{}` to that figure appears textually after the `\begin{figure}`). Figures should be mentioned before or at the point where the reader encounters them.
+- `[INFO]` if a figure is referenced only once in the entire document; verify the call-out is early enough.
 
 #### 5.2 Check that every reference points to an existing label
 
@@ -430,6 +517,8 @@ Collect all figure and table labels from `\label{}` commands inside `figure` and
 Every figure and table caption must be self-contained: a reader should understand what is shown without reading the surrounding text.
 
 - `[ERROR]` if a caption is a single word or fragment (e.g., `\caption{Results.}`) — captions should describe what is shown.
+- `[ERROR]` if a figure uses visual elements (line styles, colors, arrow styles, shading) that are not explained in the caption or a legend within the figure. For example, if both solid and dashed lines appear, the caption must state what each represents.
+- `[WARN]` if a caption says only "Results of experiment X" without describing what the axes, curves, or visual elements represent.
 - `[WARN]` if a caption uses an abbreviation that is not introduced either within the caption itself or in the document before the figure/table appears in reading order.
 - `[WARN]` if a caption uses a math symbol that is not defined within the caption and has not been defined in the main text before this point.
 - `[ERROR]` if a caption ends without a period.
@@ -509,6 +598,19 @@ For each figure file included in the paper, view it directly (use the Read tool 
 
 **Grid lines:**
 - `[INFO]` if a result plot has no background grid lines. Light grid lines generally improve readability.
+
+#### 5.10 Check cross-figure connections
+
+- `[WARN]` if two figures use the same symbol, trajectory, or visual element where a connection between them would help the reader, but no explicit cross-reference exists in the text or captions. For example, if Fig. 4 shows a trajectory that was first introduced in Fig. 3, the caption of Fig. 4 should say so.
+
+#### 5.12 Check LaTeX caption package conflicts
+
+- `[WARN]` if the document uses an IEEE conference class (`IEEEtran.cls` or similar) and also includes `\usepackage{caption}` or `\usepackage{subcaption}`. These packages corrupt caption font sizes in IEEE templates and must be removed.
+
+#### 5.13 Check algorithm environments
+
+- `[INFO]` if the paper contains `\begin{algorithm}` environments and the surrounding text refers to the algorithm by name only, never referencing specific line numbers. Note that `\label` can be placed inside algorithm environments to reference specific lines.
+- `[INFO]` if an algorithm uses variables in its body that are neither declared as inputs nor initialized within the algorithm. These "variables that fall from the sky" should either be added to the inputs or initialized explicitly. Assess which ones are genuinely missing versus which are duplicates or implicit from context.
 
 ---
 
