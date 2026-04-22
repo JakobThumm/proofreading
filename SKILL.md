@@ -273,7 +273,56 @@ For each custom command defined in Step 1, search all math environments for occu
 
 ### Check 3: Introduction Structure
 
-<!-- To be filled in -->
+**Goal**: Verify that the abstract and introduction follow the expected structure of an academic paper: clear problem motivation, gap identification, proposed approach, quantitative results (abstract), explicit contributions, and a section roadmap.
+
+#### 3.1 Check abstract structure
+
+The abstract must follow this fixed four-part structure, in order:
+
+1. **Motivate the problem** — why does this problem matter? Showing real-world relevance strongly recommended.
+2. **Identify the gap** — what do existing approaches fail to do?
+3. **State the proposed approach** — what does this paper do?
+4. **Give key quantitative results** — at least one concrete number supporting the main claim.
+
+- `[ERROR]` if any of the four parts is entirely absent.
+- `[WARN]` if the parts appear but are out of order (e.g., approach stated before gap).
+- `[WARN]` if no quantitative result is given (e.g., only qualitative claims like "significantly improves").
+- `[INFO]` if the abstract exceeds 150 words (typical conference limit; adjust if venue is known).
+
+#### 3.2 Check introduction structure
+
+The introduction must contain, in roughly this order:
+
+1. **Motivation** — a paragraph establishing why the problem is important and relevant. Showing real-world relevance strongly recommended.
+2. **State of the art and gap** — a summary of related approaches and their shortcomings. The gap must be stated explicitly (e.g., "However, none of these methods...").
+3. **Proposed approach** — a description of what this paper proposes and why it addresses the gap.
+4. **Contribution list** — a very concrete list of explicit contributions (see 3.3). 
+5. **Section roadmap** — [OPTIONAL] a final paragraph describing the structure of the paper (see 3.4).
+
+- `[ERROR]` if the contribution list is absent.
+- `[INFO]` if the section roadmap is absent.
+- `[WARN]` if the gap is not stated explicitly (related work is described but no "However,..." or equivalent contrast is made).
+- `[WARN]` if the proposed approach is not re-stated in the introduction after the related work (it should appear both in the abstract and the introduction).
+- `[INFO]` if the introduction order deviates significantly from the structure above.
+
+#### 3.3 Check contribution list
+
+- `[ERROR]` if a contribution item is too encompassing. The contributions should very precisely list the new theoretical contributions to the field. These contributions must be elements that are not present in related work. New contributions should be supported by theorems, proofs, algorithms etc. 
+- `[ERROR]` if a contribution item is vague and not falsifiable — e.g., "We improve performance" without specifying what is improved or by how much. A good contribution names the specific claim: "We show that our method reduces collision rate by 30% compared to baseline X."
+- `[ERROR]` if the word `contribut`..., e.g., contribute, contribution, is not used in the introduction.
+- `[WARN]` if contributions are not presented as a list (numbered or bulleted). A list is recommended, but a very clear sentence with (a), (b), and (c) or (i), (ii), and (iii) also works. 
+- `[INFO]` if any contribution item does not begin with "We", "This work", "In this paper" etc. (e.g., "We propose...", "We show...", "We evaluate...", "We introduce...", "We demonstrate...").
+- `[INFO]` if a contribution item uses passive voice instead of "We" (e.g., "A new method is proposed" → "We propose a new method").
+
+#### 3.4 Check section roadmap
+
+The last paragraph of the introduction should describe the structure of the remainder of the paper.
+
+- `[WARN]` if no roadmap paragraph is present in the introduction.
+- `[ERROR]` if the roadmap references a section number or name that does not match the actual sections in the document (verify against `\section{}` commands).
+- `[WARN]` if the roadmap uses future tense ("will be presented") instead of present tense ("is presented", "presents").
+- `[WARN]` if not all major sections are mentioned in the roadmap (every top-level `\section{}` except the introduction itself should appear).
+- `[INFO]` if the roadmap does not open with a standard linking phrase such as "The remainder of this paper is structured as follows" or "This paper is organized as follows".
 
 ---
 
