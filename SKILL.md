@@ -129,6 +129,15 @@ If the paper has a dedicated problem statement section or subsection:
 - `[WARN]` if the conclusion does not mention at least one key quantitative result. `[VIBE]`
 - `[INFO]` if the conclusion introduces new content not discussed anywhere else in the paper. `[VIBE]`
 
+#### 1.9 Check motivation scope
+
+Motivation — establishing why the problem matters, why existing approaches fall short, or why the task is challenging — belongs exclusively in the introduction (and, briefly, the related work gap statement). Method sections must describe *what* the approach does and *how* it works, not re-argue *why* the problem is worth solving.
+Flag motivational content in the methodology section(s) and experiment/result section(s):
+
+- `[ERROR]` if a method paragraph opens with a sentence that re-states the problem motivation from the introduction (e.g., "Ensuring safety is critical in human-robot interaction because...", "Existing methods fail to handle..."). `[VIBE]`
+- `[ERROR]` if a method paragraph introduces new motivation not present in the introduction — a reason the problem is hard or important that was not established earlier (e.g., "Another challenge is that sensors are noisy, which makes..."). `[VIBE]`
+- `[WARN]` if transitional sentences between subsections of the method re-introduce the gap or limitation of prior work (e.g., "Since prior methods cannot handle X, we instead..."). A single back-reference is acceptable; repeated gap re-statements across multiple method subsections are not. `[VIBE]`
+
 ---
 
 ### Check 2: Math Symbols and Notation
